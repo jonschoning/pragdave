@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+  <link rel="stylesheet" href="/home/jon/bin/GitHub2.css">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h1 id="kata-twenty-one-simple-lists">Kata Twenty One: Simple Lists</h1>
+<p>Perhaps there’s more to the humble list of values than you might think. Let’s experiment with some basic list processing.</p>
+<p>Lists are one of the first data structures we learn as programmers. But familiarity doesn’t mean that we can’t learn a little from them.<br />
+For this kata we’re going to code up three implementations of a list that has the following basic interface:</p>
+<ul>
+<li>The list consists of nodes. Each node has a string value, along with whatever housekeeping the list itself needs.</li>
+<li>New nodes are added to the end of the list.</li>
+<li>You can ask the list if it contains a given string. If it does, it returns the node containing that string.</li>
+<li>You can delete a node from the list.</li>
+<li>You can ask the list to return an array of all its values.</li>
+</ul>
+<p>Here’s a basic set of unit tests to illustrate the behavior.</p>
+<div class="sourceCode"><pre class="sourceCode ruby"><code class="sourceCode ruby">list = <span class="dt">List</span>.new
+assert_nil(list.find(<span class="st">&quot;fred&quot;</span>))
+list.add(<span class="st">&quot;fred&quot;</span>)
+assert_equal(<span class="st">&quot;fred&quot;</span>, list.find(<span class="st">&quot;fred&quot;</span>).value())
+assert_nil(list.find(<span class="st">&quot;wilma&quot;</span>))
+list.add(<span class="st">&quot;wilma&quot;</span>)
+assert_equal(<span class="st">&quot;fred&quot;</span>,  list.find(<span class="st">&quot;fred&quot;</span>).value())
+assert_equal(<span class="st">&quot;wilma&quot;</span>, list.find(<span class="st">&quot;wilma&quot;</span>).value())
+assert_equal([<span class="st">&quot;fred&quot;</span>, <span class="st">&quot;wilma&quot;</span>], list.values())
+
+list = <span class="dt">List</span>.new
+list.add(<span class="st">&quot;fred&quot;</span>)
+list.add(<span class="st">&quot;wilma&quot;</span>)
+list.add(<span class="st">&quot;betty&quot;</span>)
+list.add(<span class="st">&quot;barney&quot;</span>)
+assert_equal([<span class="st">&quot;fred&quot;</span>, <span class="st">&quot;wilma&quot;</span>, <span class="st">&quot;betty&quot;</span>, <span class="st">&quot;barney&quot;</span>], list.values())
+list.delete(list.find(<span class="st">&quot;wilma&quot;</span>))
+assert_equal([<span class="st">&quot;fred&quot;</span>, <span class="st">&quot;betty&quot;</span>, <span class="st">&quot;barney&quot;</span>], list.values())
+list.delete(list.find(<span class="st">&quot;barney&quot;</span>))
+assert_equal([<span class="st">&quot;fred&quot;</span>, <span class="st">&quot;betty&quot;</span>], list.values())
+list.delete(list.find(<span class="st">&quot;fred&quot;</span>))
+assert_equal([<span class="st">&quot;betty&quot;</span>], list.values())
+list.delete(list.find(<span class="st">&quot;betty&quot;</span>))
+assert_equal([], list.values())</code></pre></div>
+<p>For the kata, where the idea is to practice, let’s write three implementations of the list:</p>
+<ol>
+<li>A singly linked list (each node has a reference to the next node).</li>
+<li>A doubly linked list (each node has a reference to both the next and previous nodes).</li>
+<li>Some other implementation of your choosing, except that it should use no references (pointers) to collect nodes together in the list.</li>
+</ol>
+<p>Obviously, we won’t be using predefined library classes as our list implementations…</p>
+<h2 id="objectives">Objectives</h2>
+<p>There’s nothing magical or surprising in list implementations, but there are a fair number of boundary conditions. For example, when deleting from the singly-linked list, did you have to deal with the case of deleting the first element in the list specially?</p>
+<p>For this kata, concentrate on ways of removing as many of these boundary conditions as possible. Then ask yourself: Is the resulting code, which will contain fewer special cases, easier to read and maintain? How easy was it to eliminate these special cases? Were there trade-offs, where removing a special case in one area complicated the code in another. Is there a sweet-spot when it comes to simplifying code?</p>
+</body>
+</html>

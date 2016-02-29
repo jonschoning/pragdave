@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="/home/jon/bin/GitHub2.css">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h1 id="kata-eight-conflicting-objectives">Kata Eight: Conflicting Objectives</h1>
+<p>Why do we write code? At one level, we’re trying to solve some particular problem, to add some kind of value to the world. But often there are also secondary objectives: the code has to solve the problem, and it also has to be fast, or easy to maintain, or extend, or whatever. So let’s look at that.</p>
+<p>For this kata, we’re going to write a program to solve a simple problem, and we’re going to write it with three different sub-objectives. Our program is going do process the dictionary we used in previous kata, this time looking for all six letter words which are composed of two concatenated smaller words. For example:</p>
+<pre><code>al + bums =&gt; albums
+bar + ely =&gt; barely
+be + foul =&gt; befoul
+con + vex =&gt; convex
+here + by =&gt; hereby
+jig + saw =&gt; jigsaw
+tail + or =&gt; tailor
+we + aver =&gt; weaver</code></pre>
+<p>Write the program three times.</p>
+<ul>
+<li>The first time, make program as readable as you can make it.</li>
+<li>The second time, optimize the program to run fast fast as you can make it.</li>
+<li>The third time, write as extendible a program as you can.</li>
+</ul>
+<p>Now look back at the three programs and think about how each of the three subobjectives interacts with the others. For example, does making the program as fast as possible make it more or less readable? Does it make easier to extend? Does making the program readable make it slower or faster, flexible or rigid? And does making it extendible make it more or less readable, slower or faster? Are any of these correlations stronger than others? What does this mean in terms of optimizations you may perform on the code you write?</p>
+</body>
+</html>

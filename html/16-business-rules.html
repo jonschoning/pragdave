@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="/home/jon/bin/GitHub2.css">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h1 id="kata-sixteen-business-rules">Kata Sixteen: Business Rules</h1>
+<p>How can you tame a wild (and changing) set of business rules?</p>
+<p>Imagine you’re writing an order processing application for a large company. In the past, this company used a fairly random mixture of manual and ad-hoc automated business practices to handle orders; they now want to put all these various ways of hanadling orders together into one whole: your application. However, they (and their customers) have come to cherish the diversity of their business rules, and so they tell you that you’ll have to bring all these rules forward into the new system.</p>
+<p>When you go in to meet the existing order entry folks, you discover that their business practices border on chaotic: no two product lines have the same set of processing rules. To make it worse, most of the rules aren’t written down: you’re often told something like &quot;oh, Carol on the second floor handles that kind of order.&quot;</p>
+<p>During first day of meetings, you’ve decided to focus on payments, and in particular on the processing required when a payment was received by the company. You come home, exhausted, with a legal pad full of rule snippets such as:</p>
+<ul>
+<li>If the payment is for a physical product, generate a packing slip for shipping.</li>
+<li>If the payment is for a book, create a duplicate packing slip for the royalty department.</li>
+<li>If the payment is for a membership, activate that membership.</li>
+<li>If the payment is an upgrade to a membership, apply the upgrade.</li>
+<li>If the payment is for a membership or upgrade, e-mail the owner and inform them of the activation/upgrade.</li>
+<li>If the payment is for the video &quot;Learning to Ski,&quot; add a free &quot;First Aid&quot; video to the packing slip (the result of a court decision in 1997).</li>
+<li>If the payment is for a physical product or a book, generate a commission payment to the agent.<br />
+and so on, and so on, for seven long, yellow pages.<br />
+And each day, to your horror, you gather more and more pages of these rules.</li>
+</ul>
+<p>Now you’re faced with implementing this system. The rules are complicated, and fairly arbitrary. What’s more, you know that they’re going to change: once the system goes live, all sorts of special cases will come out of the woodwork.</p>
+<h2 id="objectives">Objectives</h2>
+<p>How can you tame these wild business rules? How can you build a system that will be flexible enough to handle both the complexity and the need for change? And how can you do it without condemming yourself to years and years of mindless support?</p>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+  <link rel="stylesheet" href="/home/jon/bin/GitHub2.css">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h1 id="kata-eighteen-transitive-dependencies">Kata Eighteen: Transitive Dependencies</h1>
+<p>Let’s write some code that calculates how dependencies propagate between things such as classes in a program.</p>
+<p>Highly coupled code is code where the dependencies between things are dense, lots of things depend on other things. This kind of program is hard to understand, tough to maintain, and tends to be fragile, breaking easily when things change.</p>
+<p>There are many different kinds of coupling in code. One of the easiest to work with programatically is <em>static coupling</em>, where we’re concerned with the relationships between chunks of source code. Simplisticly, we can say that class A is statically coupled to class B if the compiler needs the definition of B in order to compile A.</p>
+<p>In many languages, static dependencies can be determined by source<br />
+code analysis. Tools such as makedepend (for C programs) and JDepend (for Java) look for explicit dependencies in the source and list them out.</p>
+<p>One of the insidious things about dependencies is that they are transitive—if A depends on B and B depends on C, then A also depends on C. So, let’s write some code that calculates the full set of dependencies for a group of items. The code takes as input a set of lines where the first token is the name of an item. The remaining tokens are the names of things that this first item depends on. Given the following input, we know that A directly depends on B and C, B depends on C and E, and so on.</p>
+<pre><code>A   B   C
+B   C   E
+C   G
+D   A   F
+E   F
+F   H</code></pre>
+<p>The program should use this data to calculate the full set of dependencies. For example, looking at B, we see it directly depends on C and E. C in turn relies on G, E relies on F, and F relies on H. This means that B ultimately relies on C, E, F, G, and H. In fact, the full set of dependencies for the previous example is:</p>
+<pre><code>A   B C E F G H
+B   C E F G H
+C   G
+D   A B C E F G H
+E   F H
+F   H</code></pre>
+<p>Let’s express this using unit tests. The following code assumes that our dependency calculator is a class with an <code>add_direct()</code> method to add the direct dependencies for an item, and a <code>dependencies_for()</code> method to return the full list of dependencies for an item. The code uses Ruby’s <code>%w{…}</code> construct, which builds an array of strings from its argument.</p>
+<div class="sourceCode"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span class="kw">def</span> test_basic
+  dep = <span class="dt">Dependencies</span>.new
+  dep.add_direct(<span class="st">&#39;A&#39;</span>,<span class="ot"> %w{</span><span class="st"> B C </span><span class="ot">}</span> )
+  dep.add_direct(<span class="st">&#39;B&#39;</span>,<span class="ot"> %w{</span><span class="st"> C E </span><span class="ot">}</span> )
+  dep.add_direct(<span class="st">&#39;C&#39;</span>,<span class="ot"> %w{</span><span class="st"> G   </span><span class="ot">}</span> )
+  dep.add_direct(<span class="st">&#39;D&#39;</span>,<span class="ot"> %w{</span><span class="st"> A F </span><span class="ot">}</span> )
+  dep.add_direct(<span class="st">&#39;E&#39;</span>,<span class="ot"> %w{</span><span class="st"> F   </span><span class="ot">}</span> )
+  dep.add_direct(<span class="st">&#39;F&#39;</span>,<span class="ot"> %w{</span><span class="st"> H   </span><span class="ot">}</span> )
+
+  assert_equal(<span class="ot"> %w{</span><span class="st"> B C E F G H </span><span class="ot">}</span>,   dep.dependencies_for(<span class="st">&#39;A&#39;</span>))
+  assert_equal(<span class="ot"> %w{</span><span class="st"> C E F G H </span><span class="ot">}</span>,     dep.dependencies_for(<span class="st">&#39;B&#39;</span>))
+  assert_equal(<span class="ot"> %w{</span><span class="st"> G </span><span class="ot">}</span>,             dep.dependencies_for(<span class="st">&#39;C&#39;</span>))
+  assert_equal(<span class="ot"> %w{</span><span class="st"> A B C E F G H </span><span class="ot">}</span>, dep.dependencies_for(<span class="st">&#39;D&#39;</span>))
+  assert_equal(<span class="ot"> %w{</span><span class="st"> F H </span><span class="ot">}</span>,           dep.dependencies_for(<span class="st">&#39;E&#39;</span>))
+  assert_equal(<span class="ot"> %w{</span><span class="st"> H </span><span class="ot">}</span>,             dep.dependencies_for(<span class="st">&#39;F&#39;</span>))
+<span class="kw">end</span></code></pre></div>
+<p>Stop reading now, and start coding. Once you’ve got your code working, try feeding it the following dependencies.</p>
+<pre><code>A B
+B C
+C A</code></pre>
+<p>Does it work correctly? If not, ask yourself is this is a condition you should have considered during testing.</p>
+<p>Once you’ve got your code working with all the various test cases you can imagine, let’s think for a minute about performance. Say we were using this code to find all the relationships between the inhabitants of the United Kingdom. How would your code perform with 55-60 million items?</p>
+</body>
+</html>

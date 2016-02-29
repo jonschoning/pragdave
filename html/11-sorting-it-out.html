@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+  <link rel="stylesheet" href="/home/jon/bin/GitHub2.css">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h1 id="kata-eleven---sorting-it-out">Kata Eleven - Sorting it Out</h1>
+<p>Just because we need to sort something doesn’t necessarily mean we need to use a conventional sorting algorithm.</p>
+<p>We use sorting routines all the time; putting customer records in to name order, arranging orders by value (and even sorting the letters in a word back in KataSix). Most of the time we (wisely) use one of the sort routines built in to our language’s library (such as C’s qsort and Java’s java.Collections.sort). After all, very clever folks spent a lot of time getting these library routines tuned for speed and/or memory usage.</p>
+<p>However, there are times when whipping up a sort of our own can outperform these generic routines. Our challenge this week is to implement a couple of different sorts. (However, at the risk of giving the game away, these sorts both have something in common).</p>
+<h2 id="sorting-balls">Sorting Balls</h2>
+<p>In the Pragmatic Lottery (motto: There’s One Born Every Minute, and it Might Just Be You!), we select each week’s winning combination by drawing balls. There are sixty balls, numbered (not surprisingly, as we are programmers) 0 to 59. The balls are drawn by the personable, but somewhat distracted, Daisy Mae. As a result, some weeks five numbers are drawn, while other weeks seven, nine, or even fifteen balls make it to the winner’s rack. Regardless of the number of balls drawn, our viewers need to see the list of winning numbers in sorted order just as soon as possible. So, your challenge is to come up with some code that accepts each number as it is drawn and presents the sorted list of numbers so far. The tests might look something like:</p>
+<div class="sourceCode"><pre class="sourceCode ruby"><code class="sourceCode ruby">  rack = <span class="dt">Rack</span>.new
+  assert_equal([], rack.balls)
+  rack.add(<span class="dv">20</span>)
+  assert_equal([ <span class="dv">20</span> ], rack.balls)
+  rack.add(<span class="dv">10</span>)
+  assert_equal([ <span class="dv">10</span>, <span class="dv">20</span> ], rack.balls)
+  rack.add(<span class="dv">30</span>)
+  assert_equal([ <span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span> ], rack.balls)
+  <span class="dt">Sorting</span> <span class="dt">Characters</span></code></pre></div>
+<p>Our resident conspiracy expert, Dr. X, is looking for hidden messages in the collected publications of Hugh Hefner. Dr. X believes the message is hidden in the individual letters, so rather than get distracted by the words, he’s asked us to write a program to take a block of text and return the letters it contains, sorted. Given the text:</p>
+<p>: When not studying nuclear physics, Bambi likes to play<br />
+: beach volleyball.</p>
+<p>our program would return:</p>
+<p>: aaaaabbbbcccdeeeeeghhhiiiiklllllllmnnnnooopprsssstttuuvwyyyy</p>
+<p>The program ignores punctuation, and maps upper case to lower case.</p>
+<p>Are there any ways to perform this sort cheaply, and without using built-in libraries?</p>
+</body>
+</html>

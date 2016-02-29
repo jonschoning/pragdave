@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="/home/jon/bin/GitHub2.css">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h1 id="kata-nineteen---word-chains">Kata Nineteen - Word Chains</h1>
+<p>Write a program that solves word-chain puzzles.</p>
+<p>There’s a type of puzzle where the challenge is to build a chain of words, starting with one particular word and ending with another. Successive entries in the chain must all be real words, and each can differ from the previous word by just one letter. For example, you can get from &quot;cat&quot; to &quot;dog&quot; using the following chain.</p>
+<pre><code>cat
+cot
+cog
+dog</code></pre>
+<p>The objective of this kata is to write a program that accepts start and end words and, using words from the dictionary, builds a word chain between them. For added programming fun, return the shortest word chain that solves each puzzle. For example, my Powerbook running Ruby can turn &quot;lead&quot; into &quot;gold&quot; in four steps (lead, load, goad, gold), taking about 20 seconds. Turning &quot;ruby&quot; into &quot;code&quot; takes six steps (ruby, rubs, robs, rods, rode, code) and 90 seconds, while turning &quot;code&quot; into &quot;ruby&quot; (again in six steps) takes about an hour. Go figure…</p>
+<p>Update: It turns out that my original algorithm was pretty dumb: a better approach greatly speeds up search and makes it symetrical. It now does all the above examples in between 0.5s and 1s.</p>
+</body>
+</html>

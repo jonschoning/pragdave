@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+  <link rel="stylesheet" href="/home/jon/bin/GitHub2.css">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h1 id="kata-nine-back-to-the-checkout">Kata Nine: Back to the CheckOut</h1>
+<p>Back to the supermarket. This week, we’ll implement the code for a checkout system that handles pricing schemes such as &quot;apples cost 50 cents, three apples cost $1.30.&quot;</p>
+<p>Way back in <a href="../kata-1/README.md">KataOne</a> we thought about how to model the various options for supermarket pricing. We looked at things such as &quot;three for a dollar,&quot; &quot;$1.99 per pound,&quot; and &quot;buy two, get one free.&quot;</p>
+<p>This week, let’s implement the code for a supermarket checkout that calculates the total price of a number of items. In a normal supermarket, things are identified using Stock Keeping Units, or SKUs. In our store, we’ll use individual letters of the alphabet (A, B, C, and so on). Our goods are priced individually. In addition, some items are multipriced: buy n of them, and they’ll cost you y cents. For example, item ‘A’ might cost 50 cents individually, but this week we have a special offer: buy three ‘A’s and they’ll cost you $1.30. In fact this week’s prices are:</p>
+<pre><code>Item   Unit      Special
+Price     Price
+--------------------------
+A     50       3 for 130
+B     30       2 for 45
+C     20
+D     15</code></pre>
+<p>Our checkout accepts items in any order, so that if we scan a B, an A, and another B, we’ll recognize the two B’s and price them at 45 (for a total price so far of 95). Because the pricing changes frequently, we need to be able to pass in a set of pricing rules each time we start handling a checkout transaction.</p>
+<p>The interface to the checkout should look like:</p>
+<div class="sourceCode"><pre class="sourceCode ruby"><code class="sourceCode ruby">  co = <span class="dt">CheckOut</span>.new(pricing_rules)
+  co.scan(item)
+  co.scan(item)
+  :    :
+  price = co.total</code></pre></div>
+<p>Here’s a set of unit tests for a Ruby implementation. The helper method price lets you specify a sequence of items using a string, calling the checkout’s scan method on each item in turn before finally returning the total price.</p>
+<div class="sourceCode"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span class="kw">class</span> <span class="dt">TestPrice</span> &lt; <span class="dt">Test</span>::<span class="dt">Unit</span>::<span class="dt">TestCase</span>
+  <span class="kw">def</span> price(goods)
+    co = <span class="dt">CheckOut</span>.new(<span class="dt">RULES</span>)
+    goods.split(<span class="ot">//</span>).each { |item| co.scan(item) }
+    co.total
+  <span class="kw">end</span>
+
+  <span class="kw">def</span> test_totals
+    assert_equal(  <span class="dv">0</span>, price(<span class="st">&quot;&quot;</span>))
+    assert_equal( <span class="dv">50</span>, price(<span class="st">&quot;A&quot;</span>))
+    assert_equal( <span class="dv">80</span>, price(<span class="st">&quot;AB&quot;</span>))
+    assert_equal(<span class="dv">115</span>, price(<span class="st">&quot;CDBA&quot;</span>))
+
+    assert_equal(<span class="dv">100</span>, price(<span class="st">&quot;AA&quot;</span>))
+    assert_equal(<span class="dv">130</span>, price(<span class="st">&quot;AAA&quot;</span>))
+    assert_equal(<span class="dv">180</span>, price(<span class="st">&quot;AAAA&quot;</span>))
+    assert_equal(<span class="dv">230</span>, price(<span class="st">&quot;AAAAA&quot;</span>))
+    assert_equal(<span class="dv">260</span>, price(<span class="st">&quot;AAAAAA&quot;</span>))
+
+    assert_equal(<span class="dv">160</span>, price(<span class="st">&quot;AAAB&quot;</span>))
+    assert_equal(<span class="dv">175</span>, price(<span class="st">&quot;AAABB&quot;</span>))
+    assert_equal(<span class="dv">190</span>, price(<span class="st">&quot;AAABBD&quot;</span>))
+    assert_equal(<span class="dv">190</span>, price(<span class="st">&quot;DABABA&quot;</span>))
+  <span class="kw">end</span>
+
+  <span class="kw">def</span> test_incremental
+    co = <span class="dt">CheckOut</span>.new(<span class="dt">RULES</span>)
+    assert_equal(  <span class="dv">0</span>, co.total)
+    co.scan(<span class="st">&quot;A&quot;</span>);  assert_equal( <span class="dv">50</span>, co.total)
+    co.scan(<span class="st">&quot;B&quot;</span>);  assert_equal( <span class="dv">80</span>, co.total)
+    co.scan(<span class="st">&quot;A&quot;</span>);  assert_equal(<span class="dv">130</span>, co.total)
+    co.scan(<span class="st">&quot;A&quot;</span>);  assert_equal(<span class="dv">160</span>, co.total)
+    co.scan(<span class="st">&quot;B&quot;</span>);  assert_equal(<span class="dv">175</span>, co.total)
+  <span class="kw">end</span>
+<span class="kw">end</span></code></pre></div>
+<p>There are lots of ways of implementing this kind of algorithm; if you have time, experiment with several.</p>
+<p>Objectives of the Kata</p>
+<p>To some extent, this is just a fun little problem. But underneath the covers, it’s a stealth exercise in decoupling. The challenge description doesn’t mention the format of the pricing rules. How can these be specified in such a way that the checkout doesn’t know about particular items and their pricing strategies? How can we make the design flexible enough so that we can add new styles of pricing rule in the future?</p>
+</body>
+</html>
